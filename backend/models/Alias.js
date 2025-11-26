@@ -6,6 +6,8 @@ const aliasSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   createdAt: { type: Date, default: Date.now },
   expiresAt: Date,
+  // Duration in milliseconds for how long this alias should remain active
+  expiryDuration: Number,
   isPremium: Boolean,
 });
 
