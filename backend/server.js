@@ -26,6 +26,15 @@ const bootstrap = async () => {
   const { default: rateLimiter } = await import("./middlewares/rateLimiter.js");
   app.use(rateLimiter);
 
+  // Home route
+  app.get("/", (req, res) => {
+    res.json({
+      status: "success",
+      message: "MaskMe Backend is Live 🚀",
+      docs: "/api"
+    });
+  });
+
   // Health route (before business routes)
   app.get("/api/health", (req, res) => {
     const states = ["disconnected", "connected", "connecting", "disconnecting"];
