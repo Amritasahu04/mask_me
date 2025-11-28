@@ -1,9 +1,15 @@
 import jwt from "jsonwebtoken";
 
 const authMiddleware = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
+
   if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  if (!process.env.JWT_SECRET) {
+    return res.status(500).json({ error: "JWT_SECRET is not configured" });
   }
 
   try {
@@ -15,5 +21,3 @@ const authMiddleware = (req, res, next) => {
 };
 
 export default authMiddleware;
-
-
