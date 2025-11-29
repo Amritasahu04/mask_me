@@ -5,7 +5,7 @@ import {
   deleteAlias,
   getAliasStats,
 } from "../controllers/aliasController.js";
-import authMiddleware from "../middlewares/authMiddleware.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 

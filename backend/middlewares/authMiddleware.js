@@ -1,23 +1,14 @@
 import jwt from "jsonwebtoken";
 
-const authMiddleware = (req, res, next) => {
-  const authHeader = req.headers.authorization || "";
-  const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
-
-  if (!token) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  if (!process.env.JWT_SECRET) {
-    return res.status(500).json({ error: "JWT_SECRET is not configured" });
-  }
+export const authMiddleware = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ message: "No token provided" });
 
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
-    next();
-  } catch (error) {
-    res.status(401).json({ error: "Unauthorized" });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // store user info
+    next(); // pass request forward
+  } catch (err) {
+    return res.status(403).json({ message: "Invalid or expired token" });
   }
 };
-
-export default authMiddleware;
